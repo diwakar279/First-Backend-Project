@@ -8,7 +8,7 @@
    - Create [temp] folder inside [public] folder
    - Create [.gitkeep] file inside [temp] so that this [public,temp] folder can be push into git
 
-4. Create [.gitignore] in the root & to tell which files should not be pushed
+4. Create [.gitignore] in the root then [.gitignore] will tell which files should not be pushed
 
 5. Create [.env] in the root
 
@@ -23,5 +23,5 @@
 9. Install nodemon as dev dependency
 
 10. Install Prettier as dev dependency
-    - Create [.prettierrc] file to configure the Prettier code formatter
-    - Create [.prettierignore] file to ignore certain files and folders completely
+    - Create [.prettierrc] file in root to configure the Prettier code formatter
+    - Create [.prettierignore] file in root to ignore certain files and folders completely
