@@ -12,6 +12,22 @@ dotenv.config({
 //Second Approach to connect Database
 connectDB()
 
+// This below SUSPICIOUS code might be gone wrong in run time if nothing works just erase this below code
+.then(() => {
+    app.on("error",(err)=>{
+        console.log(`This ERROR coming after then : ${err}`);
+        throw err      
+    })
+// SUSPICIOUS  code ends here
+
+    app.listen(process.env.PORT || 7000 , ()=>{
+        console.log(` Server running at Port : ${process.env.PORT}`);
+    })
+})
+.catch((err)=>{
+    console.log(`Mongo DB connection failed!!!!`,err);
+})
+
 
 /*
 
