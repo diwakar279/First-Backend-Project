@@ -1,4 +1,3 @@
-
 import mongoose, { mongo } from "mongoose";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
@@ -48,7 +47,6 @@ const userSchema=new mongoose.Schema(
         }
     })
 
-
 //pre() is a hook just like any other hook in react 
 //This pre() will run before any event written on it's parameter e.g. here it takes "save" means it'll run before save
 
@@ -71,6 +69,7 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 
 //Here we are generating Access Token using methods by jwt package
 userSchema.methods.generateAccessToken = function () {
+    //Syntax -> jwt.sign(payload, secretOrPrivateKey, [options, callback])
    return jwt.sign(
         {
             _id:this.id,
@@ -87,15 +86,19 @@ userSchema.methods.generateAccessToken = function () {
 
 //Here we are generating Refresh Token using methods by jwt package
 userSchema.methods.generateRefreshToken = function () {
+     //Syntax -> jwt.sign(payload, secretOrPrivateKey, [options, callback])
     return jwt.sign(
          {
-             _id:this.id,
+            _id:this.id,
          },
          process.env.REFRESH_TOKEN_SECRET,
          {
-             expiresIn:process.env.REFRESH_TOKEN_EXPIRY
+            expiresIn:process.env.REFRESH_TOKEN_EXPIRY
          }
      )
  }
 
+ //Important Point ->
+ //Calling pre() or post() after compiling a model does not work in Mongoose in general.
+ //Hence,you must add all middleware and plugins before calling mongoose.model().
 export const User = mongoose.model("User",userSchema)

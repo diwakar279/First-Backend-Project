@@ -43,6 +43,8 @@ const videoSchema=new mongoose.Schema(
 videoSchema.plugin(mongooseAggregatePaginate)
 
 
-
+ //Important Point ->
+ //Calling pre() or post() after compiling a model does not work in Mongoose in general.
+ //Hence,you must add all middleware and plugins before calling mongoose.model().
 
 export const Video = mongoose.model("Video",videoSchema)
