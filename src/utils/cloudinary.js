@@ -17,6 +17,8 @@ const uploadFile= async function(localFilePath){
         resource_type:"auto"  //This resource_type ask the resource name it can take "auto" ,"raw","image","video"
     })
     console.log(`File is uploaded : ${uploadResult.url}`)
+    //Below line is used to delete the files after uploading in server from database successfully
+    fs.unlinkSync(localFilePath)
     return uploadResult
   } catch (error) {
     fs.unlinkSync(localFilePath) //remove the locally saved temporary file as the upload operation got failed

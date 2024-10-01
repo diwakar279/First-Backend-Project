@@ -50,6 +50,14 @@
  3.Routes creation (Check routes using Postman)
 ```
 
+> [!TIP]
+```
+How to find error:
+1.Use throw or throw new error
+2.Use console.log -> to find where our code is not running
+3.See for await
+```
+
 # Problems & Error
 
 ## Error
@@ -64,6 +72,15 @@
 
 > **Solve :** Import the express package & stored in app variable
 
+- querySrv ECONNREFUSED
+ > **Reason :** Because of slow network it couldn't connect to database
+
+ > **Solve :** By connecting to good network
+
+- ReferenceError
+> **Reason :** I did not call super constructor in derived class "_ApiResponse.js_" before accessing 'this' or returning from derived constructor
+
+> **Solve :** call super constructor in derived class before accessing 'this' 
 
 ## Problem
 

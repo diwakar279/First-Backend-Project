@@ -24,3 +24,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 ```
+
+> ***files :***
+
+> This is method is used in src/controllers/user.controller.js
+
+> **any :**
+
+>**none :**
+
+>**single :**

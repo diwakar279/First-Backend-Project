@@ -57,7 +57,7 @@ userSchema.pre("save",async function (next) {
     
 //Below line of code is used to hash the password using bcrypt 
 //It uses hash() which takes 2 parameter one is property (password) which needs encryption and other is salt i.e. 10 
-    this.password=bcrypt.hash(this.password,10)
+    this.password=await bcrypt.hash(this.password,10)
     next()  
 })
 
