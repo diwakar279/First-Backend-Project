@@ -55,8 +55,19 @@
 How to find error:
 1.Use throw or throw new error
 2.Use console.log -> to find where our code is not running
-3.See for await
+3.See for super keyword if you extends any class 
+4.See for await
+5.See for await on DB call always
+
+e.g. Let suppose User is a model
+
+    DB call -> User.findById 
+    DO's -> await User.findById
+
+    DB call -> User.findOne
+    DO's -> await User.findOne
 ```
+
 
 # Problems & Error
 
@@ -81,6 +92,33 @@ How to find error:
 > **Reason :** I did not call super constructor in derived class "_ApiResponse.js_" before accessing 'this' or returning from derived constructor
 
 > **Solve :** call super constructor in derived class before accessing 'this' 
+
+-  Cannot find module
+>**Reason :** In some cases particular file is not imported or exported or sometime if you import any JS file but forgot to add .js at the end of import statement can also cause error
+
+>**Solve :** If you do not properly import the file import first or look for the import statement for .js at the end
+
+```
+Look at the end of both statement
+Error : import { User } from "../models/user.model";
+
+Solution : import { User } from "../models/user.model.js";
+```
+
+-  starting at object with constructor 'MongoClient'
+>**Reason :** I did not use await on DB call
+
+>**Solve :** Just use await on DB call
+
+```
+This is how above error looks like
+
+TypeError: Converting circular structure to JSON
+    --> starting at object with constructor 'MongoClient'
+    |     property 's' -> object with constructor 'Object'
+    |     property 'sessionPool' -> object with constructor 'ServerSessionPool'
+    --- property 'client' closes the circle
+```
 
 ## Problem
 

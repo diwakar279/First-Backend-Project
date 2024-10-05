@@ -16,7 +16,7 @@ const uploadFile= async function(localFilePath){
     const uploadResult=await cloudinary.uploader.upload(localFilePath,{
         resource_type:"auto"  //This resource_type ask the resource name it can take "auto" ,"raw","image","video"
     })
-    console.log(`File is uploaded : ${uploadResult.url}`)
+    console.log(`File is uploaded : ${uploadResult.type}`)
     //Below line is used to delete the files after uploading in server from database successfully
     fs.unlinkSync(localFilePath)
     return uploadResult

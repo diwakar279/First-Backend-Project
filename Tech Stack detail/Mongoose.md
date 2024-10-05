@@ -31,4 +31,25 @@
    1. Model Name
    2. Name of the schema
 
+# Method-
+
+> ***Schema :*** used to build schema for more info. see above content
+
+> ***model :*** used to build model using _Schema_ for more info. see above content
+
+> ***methods :*** used to make method inside the model for later use
+```
+This method is used in src/models/user.model.js
+```
+
+> ***pre :***This method run before any event eg.next() 
+```
+This method is used in src/models/user.model.js
+```
+
+> ***findById :***
+
+>***select :***
+
+>***findByIdAndUpdate :***
 
