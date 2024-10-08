@@ -3,10 +3,11 @@ import {ApiError} from "../utils/ApiError.js"
 import { User } from "../models/user.model.js"
 import { uploadFile } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
+import {jwt} from "jsonwebtoken"
 
 const generateAccessAndRefreshToken= async (userId)=>{
     try {
-       const user= await User.findById(userId)
+      const user= await User.findById(userId)
       const accessToken= user.generateAccessToken()
       const refreshToken =user.generateRefreshToken()
 
@@ -119,8 +120,12 @@ const loginUser = asyncHandler(async(req,res)=>{
     const {email,username,password} = req.body;
     
     //Check if user is entered empty username or email 
-    if (email=="" || username=="") {
-        throw new ApiError(400,"Enter your email or username")
+    if (email=="" || username=="" ) {
+        throw new ApiError(400,"Enter email or username ")
+    }
+
+    if ( password=="") {
+        throw new ApiError(400,"Enter Password ")
     }
 
     //Check if user is entered empty username or email in advanced syntax 
@@ -131,7 +136,7 @@ const loginUser = asyncHandler(async(req,res)=>{
    
     //Finding the existing username or email
     const existedUser=await User.findOne({
-        $or : [{ username} , {email}]
+        $or : [{username} , {email}]
     })
     
     //If email or username do not exist in DB then it will
@@ -140,22 +145,21 @@ const loginUser = asyncHandler(async(req,res)=>{
     }    
     
     //Check for right password 
-   const isPasswordCorrect = existedUser.isPasswordCorrect(password)
+   const isPasswordCorrect = await existedUser.isPasswordCorrect(password)
 
    //Send message if password is correct or not
    if (!isPasswordCorrect) {
-    throw new ApiError(401,"Password is not correct")
-}
+    throw new ApiError(401,"Credentials are not correct")
+    }
 
     //getting access and refresh token
     const {accessToken,refreshToken} = await generateAccessAndRefreshToken(existedUser._id)
 
-    const loggedInUser= await User.findById(existedUser._id).
-    select("-password -refreshToken")
+    const loggedInUser= await User.findById(existedUser._id).select("-password -refreshToken")
 
     const options={
         //Because by default cookies can be modified by anyone
-        //The reason of [httpOption & secure] is true so that cookies can not be modified by fronted-user but only be modified by server
+        //The reason of [httpOnly & secure] is true so that cookies can not be modified by fronted-user but only be modified by server
         httpOnly: true,
         secure : true
     }
@@ -169,7 +173,6 @@ const loginUser = asyncHandler(async(req,res)=>{
             user:loggedInUser,accessToken,refreshToken
         })
     )
-
 })
 
 const logoutUser = asyncHandler(async (req,res)=>{
@@ -218,4 +221,50 @@ return res
 )
 })
 
-export {registerUser,loginUser,logoutUser}
+
+const refreshAccessToken = asyncHandler(async(req,res)=>{
+
+const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
+
+if(incomingRefreshToken) { throw new ApiError(401," Unauthorized Request");}
+try {
+    const decodedToken =  jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET)
+    const user= await User.findById(decodedToken?._id)
+    
+    if (!user) {throw new ApiError(401," Invalid Refresh Token");}
+    
+    if(incomingRefreshToken!== user?._id){throw new ApiError(401,"Refresh Token is not valid or used"); }
+    
+    const {newAccessToken,newRefreshToken} = await generateAccessAndRefreshToken(user._id)
+    
+    const options={
+    httpOnly: true,
+    secure:true}
+    
+    return res
+    .status(200)
+    .cookie("newAccessToken",newAccessToken,options)
+    .cookie("newRefreshToken",newRefreshToken,options)
+    .json(
+        new ApiResponse("Refresh Token and Access Token generate Successfully",203,{newAccessToken,newRefreshToken})
+    )
+    
+} catch (error) {
+    throw new ApiError(400,"Error on refreshing the Token !! Plz try again")
+}
+})
+
+/*
+Aim - If access token expires but refresh token is not expired then renew the access token
+Condition - User's refresh token must be same as DB stored refresh token
+
+Steps:
+verify if accessToken expires
+get token from user , verify if token is present or not ,Give an ApiError if token is false
+get privateorpublic key stored in a variable
+decode the token getting from user
+compare decode token with privateorpublic key , verify if token is similar or not ApiError
+ */
+
+
+export {registerUser,loginUser,logoutUse,refreshAccessToken}

@@ -15,6 +15,9 @@ JWT.IO allows you to decode, verify and generate JWT.
 
  > This is method is used in _./models/user.model.js_
 
+ >***verify() :***
+
+
 # Usage
 
 **jwt.sign(payload, secretOrPrivateKey, [options, callback])**

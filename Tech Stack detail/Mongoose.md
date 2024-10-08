@@ -53,3 +53,7 @@ This method is used in src/models/user.model.js
 
 >***findByIdAndUpdate :***
 
+>***findOne :***
+
+>***save :***
+
