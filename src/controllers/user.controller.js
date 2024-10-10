@@ -221,9 +221,20 @@ return res
 )
 })
 
-
 const refreshAccessToken = asyncHandler(async(req,res)=>{
 
+    
+/*
+Aim - If access token expires but refresh token is not expired then renew the access token
+Condition - User's refresh token must be same as DB stored refresh token
+
+Steps:
+verify if accessToken expires
+get token from user , verify if token is present or not ,Give an ApiError if token is false
+get PrivateOrPublic key stored in a variable
+decode the token getting from user
+compare decode token with PrivateOrPublic key , verify if token is similar or not ApiError
+ */
 const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
 
 if(!incomingRefreshToken) { throw new ApiError(401," Unauthorized Request");}
@@ -254,17 +265,122 @@ try {
 }
 })
 
-/*
-Aim - If access token expires but refresh token is not expired then renew the access token
-Condition - User's refresh token must be same as DB stored refresh token
+const changePassword = asyncHandler(async(req,res)=>{
 
-Steps:
-verify if accessToken expires
-get token from user , verify if token is present or not ,Give an ApiError if token is false
-get privateorpublic key stored in a variable
-decode the token getting from user
-compare decode token with privateorpublic key , verify if token is similar or not ApiError
- */
+    const {oldPassword,newPassword}= req.body
+
+    const user = await User.findById(req.user?._id)
+
+    const passwordTrueOrNot =user.isPasswordCorrect(oldPassword)
+    if (!passwordTrueOrNot) {
+        throw new ApiError(401,"Password is wrong")
+     }
+
+    user.password = newPassword
+    await user.save({validateBeforeSave:false})
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse("Password is changed" , 200)
+    )
 
 
-export {registerUser,loginUser,logoutUse,refreshAccessToken}
+   
+})
+
+const getCurrentUser = asyncHandler(async(req,res)=>{
+    return res
+    .status(201)
+    .json(
+        new ApiResponse("Current user fetched successfully",202,req.user)
+    )
+})
+
+const updateFullNameAndEmail = asyncHandler(async(req,res)=>{
+    const {fullName,email} = req.body
+    if (!fullName||!email) {
+        throw new ApiError(202,"Enter required details")
+    }
+
+    User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                fullName,
+                email
+                //OR Syntax
+                //fullName:fullName,
+                //email:email
+            }
+        },
+        {//This new value decides whether modified info. be should send to the user or not
+        new:true}
+    ).select("-password")
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse("FullName and email update successfully" , 201 ,{fullName,email})
+    )
+})
+
+const updateAvatar = asyncHandler(async(req,res)=>{
+   const avatarPath= req.file?.path
+   if (!avatarPath) {
+    throw new ApiError(400,"Something went wrong Avatar local path not found")
+   }
+
+   const avatarUpload =await uploadFile(avatarPath)
+   if (!avatarUpload.url) {
+    throw new ApiError(400,"Something went wrong Avatar url not found")
+   }
+
+   await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+       $set:{
+        avatar : avatarUpload.url
+       } 
+    },
+    {new:true})
+    .select("-password")
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse("Avatar update successfully" , 201 ,{avatar})
+    )
+})
+
+const updateCoverImage = asyncHandler(async(req,res)=>{
+    const coverImagePath = req.file?.path
+    if (!coverImagePath) {
+        throw new ApiError(400,"Plz Give authentic local path")
+    }
+
+    const coverImage = await uploadFile(coverImagePath.url)
+    if (!coverImage) {
+        throw new ApiError(401,"Url is not properly upload on cloud")
+    }
+    await User.findByIdAndUpdate(
+        req.user?._id
+    ,{
+        $set:{
+            coverImage : coverImage.url
+        }
+    },
+    {new : true}
+    ).select("-password")
+
+    
+    return res
+    .status(200)
+    .json(
+        new ApiResponse("CoverImage update successfully" , 201 ,{coverImage})
+    )
+})
+
+
+
+export {registerUser,loginUser,logoutUser,refreshAccessToken,changePassword,getCurrentUser,updateFullNameAndEmail,updateAvatar,updateCoverImage}
