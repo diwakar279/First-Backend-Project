@@ -134,13 +134,11 @@ OR
 import dotenv from "dotenv"
 dotenv.config({ path:'./env' })
 
-- If u use this syntax then you also have to modify
-your script line by experimental line
+- If u use this syntax then you also have to modify your script line by experimental line
 
  "scripts": {
     "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js"
   }
-
   ```
 
   # To Understand Project more Learn this Topics
@@ -155,11 +153,9 @@ your script line by experimental line
 middleware mongoose
 Aggregation mongoose
 Pre & Post method
+Logical Query Operator
 ```
-  3. Multer
- ```
- Documentation
- ```
+  3. Multer : [Documentation](https://github.com/expressjs/multer/blob/master/doc/README-fr.md)
 
   4. jsonwebtoken : [Documentation](https://www.npmjs.com/package/jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
   

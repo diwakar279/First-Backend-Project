@@ -4,9 +4,7 @@
 
 ```
  1. import mongoose from "mongoose"
-
  2. const <demoName> = new mongoose.Schema({})
-
  3. export const Demo = mongoose.model("Name" , <demonName>)
 ```
 
@@ -34,8 +32,16 @@
 # Method-
 
 > ***Schema :*** used to build schema for more info. see above content
+```
+This method is used in src/models/user.model.js
+& src/models/video.model.js
+```
 
 > ***model :*** used to build model using _Schema_ for more info. see above content
+```
+This method is used in src/models/user.model.js
+& src/models/video.model.js
+```
 
 > ***methods :*** used to make method inside the model for later use
 ```
@@ -47,13 +53,22 @@ This method is used in src/models/user.model.js
 This method is used in src/models/user.model.js
 ```
 
-> ***findById :***
+> ***findById :*** Finds a single document by its _id field.
+```
+This method is used in src/controllers/user.controller.js
+```
 
->***select :***
+>***select :*** Specifies which document fields to include or exclude.
+```
+This method is used in src/controllers/user.controller.js
+```
 
->***findByIdAndUpdate :***
+>***findByIdAndUpdate :*** Creates a findOneAndUpdate query, filtering by the given _id.
+```
+This method is used in src/controllers/user.controller.js
+```
 
->***findOne :***
+>***findOne :*** Finds one document.
 
 >***save :***
 
