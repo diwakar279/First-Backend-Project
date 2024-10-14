@@ -151,7 +151,7 @@ dotenv.config({ path:'./env' })
  2. Mongoose
 ```
 middleware mongoose
-Aggregation mongoose
+Aggregation pipeline
 Pre & Post method
 Logical Query Operator
 ```

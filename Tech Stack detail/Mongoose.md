@@ -8,7 +8,7 @@
  3. export const Demo = mongoose.model("Name" , <demonName>)
 ```
 
-# Breakdown-of-Above-3 Lines 
+# Breakdown Of Above 3 Lines 
 
   1. First import mongoose
   2. Creating **Schema** from method **Schema**  using _new_ keyword from mongoose and stored that in a variable.
@@ -17,7 +17,7 @@
 
   3. Exporting any variable contain **model**  that **model**  method takes [ _model-Name-as-per-wish_ , _Schema-Name (2Line)_ ]
 
-# Important - 
+# Important  
 - model Name (Line3) becomes _plural , Lowercase_ and add ('s') at last in Database side
 
 - e.g.-> If model Name is **DEMO**  becomes **demos** in Database
@@ -29,7 +29,7 @@
    1. Model Name
    2. Name of the schema
 
-# Method-
+# Method
 
 > ***Schema :*** used to build schema for more info. see above content
 ```
@@ -71,4 +71,20 @@ This method is used in src/controllers/user.controller.js
 >***findOne :*** Finds one document.
 
 >***save :***
+
+# Aggregation Pipelines
+
+MongoDB Aggregation Pipelines allows you to perform a sequence of data processing operations on the documents in a collection.
+
+Aggregation pipeline consists of a series of stages, where each stage represents a specific operation or transformation.
+
+Here are some common aggregation pipeline stages that is used in this project-
+
+- **$match :** Filters the documents to pass only the documents that match the specified condition to the next pipeline stage.
+
+- **$project :** Passes along the documents with the requested fields to the next stage in the pipeline.
+
+- **$lookup :** Performs a left outer join with another collection, combining documents from both collections based on a specified condition.
+
+- **$addFields :** Adds new fields to documents
 
